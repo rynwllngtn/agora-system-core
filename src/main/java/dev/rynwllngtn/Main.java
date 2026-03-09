@@ -1,7 +1,7 @@
 package dev.rynwllngtn;
 
 import dev.rynwllngtn.db.Db;
-import dev.rynwllngtn.db.DbException;
+import dev.rynwllngtn.db.DbIntegrityException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,18 +17,16 @@ public class Main {
         try {
             connection = Db.getConnection();
             preparedStatement = connection.prepareStatement(
-                    "UPDATE seller " +
-                        "SET BaseSalary = BaseSalary + ? " +
-                        "WHERE DepartmentId = ? ");
+                    "DELETE FROM seller " +
+                        "WHERE Id = ?");
 
-            preparedStatement.setDouble(1, 500);
-            preparedStatement.setInt(2, 1);
+            preparedStatement.setInt(1, 8);
 
             int rows = preparedStatement.executeUpdate();
             IO.println(rows + " linhas alteradas!");
         }
         catch (SQLException e) {
-            throw new DbException(e.getMessage());
+            throw new DbIntegrityException(e.getMessage());
         }
         finally {
             Db.closeStatement(preparedStatement);
