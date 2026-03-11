@@ -12,7 +12,7 @@ public class AccountDaoImplementation implements AccountDao {
     }
 
     @Override
-    public void delete(Account account) {
+    public void update(Account account) {
 
     }
 
