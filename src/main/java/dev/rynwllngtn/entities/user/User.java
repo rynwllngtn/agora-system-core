@@ -24,12 +24,12 @@ public class User implements Serializable {
     String name;
     String email;
     Date birthDate;
-    boolean isActive;
+    boolean isActive = true;
 
     public User(String cpf, String password) {
         this.cpf = cpf;
         this.password = password;
-        isActive = true;
+        birthDate = new Date();
     }
 
     @Override
