@@ -8,6 +8,7 @@ O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.
 ## [Unreleased]
 
 ### Added
+- Implementado endpoint DELETE para remoção de user.
 - Implementado endpoint POST para inserção de user com status 201 Created e URI.
 - Implementado classe configuração `DatabaseSeeder`, instanciado ao iniciar o sistema.
 - Adicionado `controller`, `repository` e `service` inicial para entidade Account.
