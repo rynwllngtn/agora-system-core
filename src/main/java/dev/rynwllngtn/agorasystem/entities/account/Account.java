@@ -1,7 +1,7 @@
 package dev.rynwllngtn.agorasystem.entities.account;
 
 import dev.rynwllngtn.agorasystem.dtos.AccountRequest;
-import dev.rynwllngtn.agorasystem.entities.user.User;
+import dev.rynwllngtn.agorasystem.dtos.user.UserReferenceDTO;
 import dev.rynwllngtn.agorasystem.enums.account.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "account_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Account {
@@ -26,24 +26,24 @@ public abstract class Account {
     @Column(updatable = false, nullable = false)
     protected UUID id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    protected User holder;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false, nullable = false)
+    protected UserReferenceDTO holder;
 
-    @Column(precision = 9, scale = 2)
+    @Column(precision = 9, scale = 2, nullable = false)
     protected BigDecimal balance;
 
-    @Column(name = "transfer_limit", precision = 9, scale = 2)
+    @Column(name = "transfer_limit", precision = 9, scale = 2, nullable = false)
     protected BigDecimal transferLimit;
 
-    @Column(name = "transfer_limit_cap", precision = 9, scale = 2)
+    @Column(name = "transfer_limit_cap", precision = 9, scale = 2, nullable = false)
     protected BigDecimal transferLimitCap;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "account_type", length = 16, insertable = false, updatable = false)
+    @Column(name = "account_type", insertable = false, updatable = false, nullable = false)
     protected AccountType accountType;
 
-    public Account(User holder) {
+    public Account(UserReferenceDTO holder) {
         this.holder = holder;
         balance = BigDecimal.ZERO;
         transferLimit = balance;
@@ -55,14 +55,6 @@ public abstract class Account {
         balance = accountRequest.getBalance();
         transferLimit = accountRequest.getTransferLimit();
         transferLimitCap = accountRequest.getTransferLimitCap();
-    }
-
-    @Override
-    public String toString() {
-        return ("Account ID: " + id + "\n" +
-                "Holder:\n\n" + holder + "\n\n" +
-                "Transaction Limit: " + transferLimit +  " | " + transferLimitCap + "\n" +
-                "Balance: " + balance);
     }
 
 }

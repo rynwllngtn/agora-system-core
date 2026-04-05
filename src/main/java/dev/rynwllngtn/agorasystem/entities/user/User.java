@@ -3,7 +3,7 @@ package dev.rynwllngtn.agorasystem.entities.user;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -12,49 +12,28 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
-    protected UUID id;
+    private UUID id;
 
-    @Column(length = 11, nullable = false)
-    protected String cpf;
+    @Column(length = 11, unique = true, nullable = false)
+    private String cpf;
 
     @Column(nullable = false)
-    protected String password;
+    private String password;
 
-    protected String name;
-    protected String email;
+    @Column(name = "user_name")
+    private String userName;
 
     @Column(name = "birth_date", nullable = false)
-    protected Date birthDate;
+    private LocalDate birthDate;
 
-    @Column(name = "is_active", nullable = false)
-    protected boolean isActive = true;
-
-    public User(String cpf, String password) {
-        this.cpf = cpf;
-        this.password = password;
-        birthDate = new Date();
-    }
-
-    @Override
-    public String toString() {
-
-        if (isActive) {
-            return ("ID: " + id + "\n" +
-                    "CPF: " + cpf + "\n" +
-                    "Password: " + password + "\n" +
-                    "Name: " + name + "\n" +
-                    "Email: " + email + "\n" +
-                    "Birthdate: " + birthDate);
-        }
-
-        return "Esse usuário está com a conta desativada!";
-    }
+    @Column(nullable = false)
+    private boolean active = true;
 
 }

@@ -1,5 +1,6 @@
 package dev.rynwllngtn.agorasystem.services.user;
 
+import dev.rynwllngtn.agorasystem.dtos.user.UserResponseDTO;
 import dev.rynwllngtn.agorasystem.entities.user.User;
 import dev.rynwllngtn.agorasystem.exceptions.database.DatabaseException;
 import dev.rynwllngtn.agorasystem.exceptions.database.DatabaseException.*;
@@ -19,11 +20,6 @@ public class UserServiceImplementation implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
 
     @Override
     public User findById(UUID id) {
@@ -64,10 +60,14 @@ public class UserServiceImplementation implements UserService {
         }
     }
 
+    @Override
+    public UserResponseDTO findUserById(UUID id) {
+        return userRepository.findUserById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
     private void updateData(User user, User userData) {
         user.setPassword(userData.getPassword());
-        user.setName(userData.getName());
-        user.setEmail(userData.getEmail());
+        user.setUserName(userData.getUserName());
         user.setBirthDate(userData.getBirthDate());
         user.setActive(userData.isActive());
     }

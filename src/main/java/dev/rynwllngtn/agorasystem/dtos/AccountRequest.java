@@ -1,11 +1,11 @@
 package dev.rynwllngtn.agorasystem.dtos;
 
+import dev.rynwllngtn.agorasystem.dtos.user.UserReferenceDTO;
 import dev.rynwllngtn.agorasystem.entities.account.Account;
 import dev.rynwllngtn.agorasystem.entities.account.accounts.AccountChecking;
 import dev.rynwllngtn.agorasystem.entities.account.accounts.AccountSaving;
-import dev.rynwllngtn.agorasystem.entities.user.User;
 import dev.rynwllngtn.agorasystem.enums.account.AccountType;
-import lombok.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class AccountRequest {
 
     protected UUID id;
-    protected User holder;
+    protected UserReferenceDTO holder;
     protected BigDecimal balance;
     protected BigDecimal transferLimit;
     protected BigDecimal transferLimitCap;

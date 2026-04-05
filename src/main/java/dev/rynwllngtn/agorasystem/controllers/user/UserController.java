@@ -1,5 +1,6 @@
 package dev.rynwllngtn.agorasystem.controllers.user;
 
+import dev.rynwllngtn.agorasystem.dtos.user.UserResponseDTO;
 import dev.rynwllngtn.agorasystem.entities.user.User;
 import dev.rynwllngtn.agorasystem.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +19,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        List<User> users = userService.findAll();
-        return ResponseEntity.ok().body(users);
-    }
-
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable UUID id) {
-        User user = userService.findById(id);
-        return ResponseEntity.ok().body(user);
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable UUID id) {
+        UserResponseDTO userResponseDTO = userService.findUserById(id);
+        return ResponseEntity.ok().body(userResponseDTO);
     }
 
     @PostMapping
-    public ResponseEntity<User> insert(@RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> insert(@RequestBody User user) {
         user = userService.insert(user);
+        UserResponseDTO userResponseDTO = new UserResponseDTO(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(uri).body(user);
+        return ResponseEntity.created(uri).body(userResponseDTO);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -44,9 +40,10 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable UUID id, @RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> update(@PathVariable UUID id, @RequestBody User user) {
         user = userService.update(id, user);
-        return ResponseEntity.ok().body(user);
+        UserResponseDTO userResponseDTO = new UserResponseDTO(user);
+        return ResponseEntity.ok().body(userResponseDTO);
     }
 
 }

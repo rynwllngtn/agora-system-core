@@ -1,5 +1,6 @@
 package dev.rynwllngtn.agorasystem.configurations;
 
+import dev.rynwllngtn.agorasystem.dtos.user.UserReferenceDTO;
 import dev.rynwllngtn.agorasystem.entities.account.accounts.AccountChecking;
 import dev.rynwllngtn.agorasystem.entities.account.accounts.AccountSaving;
 import dev.rynwllngtn.agorasystem.entities.user.User;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -36,19 +38,20 @@ public class DatabaseSeeder implements CommandLineRunner {
                                   String.format("user%d@email.com", i));
 
             userRepository.save(user);
+            UserReferenceDTO userReferenceDTO = new UserReferenceDTO(user);
 
             switch (random.nextInt(4)) {
                 case 1 -> {
-                    AccountChecking accountChecking = new AccountChecking(user);
+                    AccountChecking accountChecking = new AccountChecking(userReferenceDTO);
                     accountRepository.save(accountChecking);
                 }
                 case 2 -> {
-                    AccountSaving accountSaving = new AccountSaving(user);
+                    AccountSaving accountSaving = new AccountSaving(userReferenceDTO);
                     accountRepository.save(accountSaving);
                 }
                 case 3 -> {
-                    AccountChecking accountChecking = new AccountChecking(user);
-                    AccountSaving accountSaving = new AccountSaving(user);
+                    AccountChecking accountChecking = new AccountChecking(userReferenceDTO);
+                    AccountSaving accountSaving = new AccountSaving(userReferenceDTO);
                     accountRepository.saveAll(Arrays.asList(accountChecking, accountSaving));
                 }
             }
@@ -56,9 +59,11 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     private User buildUser(String cpf, String name, String email) {
-        User user = new User(cpf, "password");
-        user.setName(name);
-        user.setEmail(email);
+        User user = new User();
+        user.setCpf(cpf);
+        user.setPassword("password");
+        user.setUserName(name);
+        user.setBirthDate(LocalDate.now());
         return user;
     }
 

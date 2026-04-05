@@ -1,6 +1,7 @@
 package dev.rynwllngtn.agorasystem.entities.account.accounts;
 
 import dev.rynwllngtn.agorasystem.dtos.AccountRequest;
+import dev.rynwllngtn.agorasystem.dtos.user.UserReferenceDTO;
 import dev.rynwllngtn.agorasystem.entities.account.Account;
 import dev.rynwllngtn.agorasystem.entities.user.User;
 import dev.rynwllngtn.agorasystem.enums.account.AccountType;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("SAVING")
 public class AccountSaving extends Account {
 
-    public AccountSaving(User holder) {
+    public AccountSaving(UserReferenceDTO holder) {
         super(holder);
         this.accountType = AccountType.SAVING;
     }
