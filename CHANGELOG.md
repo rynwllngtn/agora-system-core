@@ -6,6 +6,28 @@ O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.
 
 ---
 
+## [Unreleased]
+
+### Added
+- Classes de transferência de dados `UserResponseDTO` e `UserReferenceDTO` para abstrair, proteger a entidade User e enxugar o tráfego de dados.
+- Arquivo `schema.sql` para atuar como documentação estática e versionamento da estrutura do banco de dados.
+- Consulta customizada e performática usando Constructor Expression (JPQL) no UserRepository para instanciar DTOs diretamente do banco de dados.
+
+### Changed
+- Refatoração dos métodos na classe `UserController` (endpoints GET, POST e PUT) para retornarem UserResponseDTO, impedindo o vazamento da entidade principal.
+- Atualização da classe `AccountRequest` para receber um `UserReferenceDTO` em vez da entidade completa.
+- Correção de nomenclatura reservada (@Table(name = "users")) e blindagem de CPF na entidade `User`.
+- Atualização da entidade User para utilizar `LocalDate`.
+- Ajuste no relacionamento *@ManyToOne* da entidade `Account` para utilizar *FetchType.LAZY*.
+- Ajuste no `DatabaseSeeder` para utilizar o novo `UserReferenceDTO` durante o povoamento inicial.
+
+
+### Removed
+- Endpoint inseguro e método findAll() de Utilizadores.
+- Métodos toString() nativos nas entidades para evitar conflitos de carregamento com o Hibernate (StackOverflowError).
+
+---
+
 ## [0.3.0] - 2026-04-04
 
 ### Added

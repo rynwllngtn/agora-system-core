@@ -38,20 +38,19 @@ public class DatabaseSeeder implements CommandLineRunner {
                                   String.format("user%d@email.com", i));
 
             userRepository.save(user);
-            UserReferenceDTO userReferenceDTO = new UserReferenceDTO(user);
 
             switch (random.nextInt(4)) {
                 case 1 -> {
-                    AccountChecking accountChecking = new AccountChecking(userReferenceDTO);
+                    AccountChecking accountChecking = new AccountChecking(user);
                     accountRepository.save(accountChecking);
                 }
                 case 2 -> {
-                    AccountSaving accountSaving = new AccountSaving(userReferenceDTO);
+                    AccountSaving accountSaving = new AccountSaving(user);
                     accountRepository.save(accountSaving);
                 }
                 case 3 -> {
-                    AccountChecking accountChecking = new AccountChecking(userReferenceDTO);
-                    AccountSaving accountSaving = new AccountSaving(userReferenceDTO);
+                    AccountChecking accountChecking = new AccountChecking(user);
+                    AccountSaving accountSaving = new AccountSaving(user);
                     accountRepository.saveAll(Arrays.asList(accountChecking, accountSaving));
                 }
             }

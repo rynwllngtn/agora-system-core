@@ -4,8 +4,6 @@ import dev.rynwllngtn.agorasystem.dtos.user.UserResponseDTO;
 import dev.rynwllngtn.agorasystem.entities.user.User;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

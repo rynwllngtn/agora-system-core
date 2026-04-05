@@ -1,7 +1,10 @@
 package dev.rynwllngtn.agorasystem.services.account;
 
+import dev.rynwllngtn.agorasystem.dtos.account.AccountResponseDTO;
+import dev.rynwllngtn.agorasystem.dtos.account.AccountUpdateRequestDTO;
 import dev.rynwllngtn.agorasystem.entities.account.Account;
 import dev.rynwllngtn.agorasystem.entities.user.User;
+import dev.rynwllngtn.agorasystem.exceptions.database.DatabaseException;
 import dev.rynwllngtn.agorasystem.repositories.account.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +20,9 @@ public class AccountServiceImplementation implements AccountService {
     private AccountRepository accountRepository;
 
     @Override
-    public List<Account> findAll() {
-        return accountRepository.findAll();
-    }
-
-    @Override
-    public Account findById(UUID id) {
-        Optional<Account> user = accountRepository.findById(id);
-        return user.get();
+    public AccountResponseDTO findById(UUID id) {
+        Optional<AccountResponseDTO> user = accountRepository.findAccountById(id);
+        return user.orElseThrow(() -> new DatabaseException.ResourceNotFoundException(id));
     }
 
     @Override
@@ -38,16 +36,10 @@ public class AccountServiceImplementation implements AccountService {
     }
 
     @Override
-    public Account update(UUID id, Account accountData) {
+    public Account update(UUID id, AccountUpdateRequestDTO accountUpdateRequestDTO) {
         Account account = accountRepository.getReferenceById(id);
-        updateData(account, accountData);
+        account.update(accountUpdateRequestDTO);
         return accountRepository.save(account);
-    }
-
-    private void updateData(Account account, Account accountData) {
-        account.setBalance(accountData.getBalance());
-        account.setTransferLimit(accountData.getTransferLimit());
-        account.setTransferLimitCap(accountData.getTransferLimitCap());
     }
 
 }

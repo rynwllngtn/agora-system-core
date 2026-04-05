@@ -1,15 +1,17 @@
 package dev.rynwllngtn.agorasystem.controllers.account;
 
-import dev.rynwllngtn.agorasystem.dtos.AccountRequest;
+import dev.rynwllngtn.agorasystem.dtos.account.AccountCreateRequestDTO;
+import dev.rynwllngtn.agorasystem.dtos.account.AccountResponseDTO;
+import dev.rynwllngtn.agorasystem.dtos.account.AccountUpdateRequestDTO;
 import dev.rynwllngtn.agorasystem.entities.account.Account;
 import dev.rynwllngtn.agorasystem.services.account.AccountService;
+import dev.rynwllngtn.agorasystem.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,24 +21,23 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping
-    public ResponseEntity<List<Account>> findAll() {
-        List<Account> accounts = accountService.findAll();
-        return ResponseEntity.ok().body(accounts);
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Account> findById(@PathVariable UUID id) {
-        Account account = accountService.findById(id);
-        return ResponseEntity.ok().body(account);
+    public ResponseEntity<AccountResponseDTO> findById(@PathVariable UUID id) {
+        AccountResponseDTO accountResponseDTO = accountService.findById(id);
+        return ResponseEntity.ok().body(accountResponseDTO);
     }
 
     @PostMapping
-    public ResponseEntity<Account> insert(@RequestBody AccountRequest accountRequest) {
-        Account account = accountRequest.getAccount();
+    public ResponseEntity<AccountResponseDTO> insert(@RequestBody AccountCreateRequestDTO accountCreateRequestDTO) {
+        Account account = accountCreateRequestDTO.getAccount();
+        account.setHolder(userService.findById(accountCreateRequestDTO.getHolder()));
         account = accountService.insert(account);
+        AccountResponseDTO accountResponseDTO = new AccountResponseDTO(account);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(account.getId()).toUri();
-        return ResponseEntity.created(uri).body(account);
+        return ResponseEntity.created(uri).body(accountResponseDTO);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -46,10 +47,10 @@ public class AccountController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Account> update(@PathVariable UUID id, @RequestBody AccountRequest accountRequest) {
-        Account account = accountRequest.getAccount();
-        account = accountService.update(id, account);
-        return ResponseEntity.ok().body(account);
+    public ResponseEntity<AccountResponseDTO> update(@PathVariable UUID id, @RequestBody AccountUpdateRequestDTO accountUpdateRequestDTO) {
+        Account account = accountService.update(id, accountUpdateRequestDTO);
+        AccountResponseDTO accountResponseDTO = new AccountResponseDTO(account);
+        return ResponseEntity.ok().body(accountResponseDTO);
     }
 
 }
