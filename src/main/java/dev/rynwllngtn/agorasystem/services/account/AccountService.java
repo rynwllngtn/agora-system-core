@@ -1,5 +1,6 @@
 package dev.rynwllngtn.agorasystem.services.account;
 
+import dev.rynwllngtn.agorasystem.dtos.account.AccountCreateRequestDTO;
 import dev.rynwllngtn.agorasystem.dtos.account.AccountResponseDTO;
 import dev.rynwllngtn.agorasystem.dtos.account.AccountUpdateRequestDTO;
 import dev.rynwllngtn.agorasystem.entities.account.Account;
@@ -13,7 +14,7 @@ public interface AccountService {
 
     public AccountResponseDTO findById(UUID id);
 
-    public Account insert(Account account);
+    public Account insert(AccountCreateRequestDTO accountCreateRequestDTO);
 
     public void delete(UUID id);
 

@@ -13,6 +13,6 @@ public class AccountUpdateRequestDTO {
 
     private BigDecimal balance;
     private BigDecimal transferLimit;
-    private BigDecimal TransferLimitCap;
+    private BigDecimal transferLimitCap;
 
 }
