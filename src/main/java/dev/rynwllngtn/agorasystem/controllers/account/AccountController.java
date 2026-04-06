@@ -21,9 +21,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private UserService userService;
-
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountResponseDTO> findById(@PathVariable UUID id) {
         AccountResponseDTO accountResponseDTO = accountService.findById(id);
@@ -32,9 +29,7 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<AccountResponseDTO> insert(@RequestBody AccountCreateRequestDTO accountCreateRequestDTO) {
-        Account account = accountCreateRequestDTO.getAccount();
-        account.setHolder(userService.findById(accountCreateRequestDTO.getHolder()));
-        account = accountService.insert(account);
+        Account account = accountService.insert(accountCreateRequestDTO);
         AccountResponseDTO accountResponseDTO = new AccountResponseDTO(account);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(account.getId()).toUri();
         return ResponseEntity.created(uri).body(accountResponseDTO);

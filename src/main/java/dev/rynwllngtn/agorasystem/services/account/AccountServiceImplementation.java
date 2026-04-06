@@ -1,15 +1,16 @@
 package dev.rynwllngtn.agorasystem.services.account;
 
+import dev.rynwllngtn.agorasystem.dtos.account.AccountCreateRequestDTO;
 import dev.rynwllngtn.agorasystem.dtos.account.AccountResponseDTO;
 import dev.rynwllngtn.agorasystem.dtos.account.AccountUpdateRequestDTO;
 import dev.rynwllngtn.agorasystem.entities.account.Account;
-import dev.rynwllngtn.agorasystem.entities.user.User;
 import dev.rynwllngtn.agorasystem.exceptions.database.DatabaseException;
 import dev.rynwllngtn.agorasystem.repositories.account.AccountRepository;
+import dev.rynwllngtn.agorasystem.services.user.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +20,9 @@ public class AccountServiceImplementation implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public AccountResponseDTO findById(UUID id) {
         Optional<AccountResponseDTO> user = accountRepository.findAccountById(id);
@@ -26,7 +30,10 @@ public class AccountServiceImplementation implements AccountService {
     }
 
     @Override
-    public Account insert(Account account) {
+    public Account insert(AccountCreateRequestDTO accountCreateRequestDTO) {
+
+        Account account = accountCreateRequestDTO.getAccount();
+        account.setHolder(userService.findUserById(accountCreateRequestDTO.getHolder()));
         return accountRepository.save(account);
     }
 
@@ -37,9 +44,18 @@ public class AccountServiceImplementation implements AccountService {
 
     @Override
     public Account update(UUID id, AccountUpdateRequestDTO accountUpdateRequestDTO) {
-        Account account = accountRepository.getReferenceById(id);
-        account.update(accountUpdateRequestDTO);
-        return accountRepository.save(account);
+
+        try {
+            Account account = accountRepository.getReferenceById(id);
+            account.update(accountUpdateRequestDTO.getBalance(),
+                           accountUpdateRequestDTO.getTransferLimit(),
+                           accountUpdateRequestDTO.getTransferLimitCap());
+
+            return accountRepository.save(account);
+        }
+        catch (EntityNotFoundException e) {
+            throw new DatabaseException.ResourceNotFoundException(id);
+        }
     }
 
 }

@@ -1,6 +1,8 @@
 package dev.rynwllngtn.agorasystem.services.user;
 
+import dev.rynwllngtn.agorasystem.dtos.user.UserCreateRequestDTO;
 import dev.rynwllngtn.agorasystem.dtos.user.UserResponseDTO;
+import dev.rynwllngtn.agorasystem.dtos.user.UserUpdateRequestDTO;
 import dev.rynwllngtn.agorasystem.entities.user.User;
 import org.springframework.stereotype.Service;
 
@@ -9,14 +11,14 @@ import java.util.UUID;
 @Service
 public interface UserService {
 
-    public User findById(UUID id);
+    UserResponseDTO findById(UUID id);
 
-    public User insert(User user);
+    User insert(UserCreateRequestDTO userCreateRequestDTO);
 
-    public void delete(UUID id);
+    void delete(UUID id);
 
-    public User update(UUID id, User user);
+    User update(UUID id, UserUpdateRequestDTO userUpdateRequestDTO);
 
-    public UserResponseDTO findUserById(UUID id);
+    User findUserById(UUID id);
 
 }

@@ -1,11 +1,12 @@
 package dev.rynwllngtn.agorasystem.entities.account;
 
-import dev.rynwllngtn.agorasystem.dtos.account.AccountCreateRequestDTO;
-import dev.rynwllngtn.agorasystem.dtos.account.AccountUpdateRequestDTO;
 import dev.rynwllngtn.agorasystem.entities.user.User;
 import dev.rynwllngtn.agorasystem.enums.account.AccountType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,7 +14,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "accounts")
@@ -44,23 +44,16 @@ public abstract class Account {
     @Column(name = "account_type", insertable = false, updatable = false, nullable = false)
     protected AccountType accountType;
 
-    public Account(User holder) {
-        this.holder = holder;
-        balance = BigDecimal.ZERO;
-        transferLimit = balance;
-        transferLimitCap = transferLimit;
+    public Account(BigDecimal balance, BigDecimal transferLimit, BigDecimal transferLimitCap) {
+        this.balance = balance;
+        this.transferLimit = transferLimit;
+        this.transferLimitCap = transferLimitCap;
     }
 
-    public Account(AccountCreateRequestDTO accountCreateRequestDTO) {
-        balance = accountCreateRequestDTO.getBalance();
-        transferLimit = accountCreateRequestDTO.getTransferLimit();
-        transferLimitCap = accountCreateRequestDTO.getTransferLimitCap();
-    }
-
-    public void update(AccountUpdateRequestDTO accountUpdateRequestDTO) {
-        balance = accountUpdateRequestDTO.getBalance();
-        transferLimit = accountUpdateRequestDTO.getTransferLimit();
-        transferLimitCap = accountUpdateRequestDTO.getTransferLimitCap();
+    public void update(BigDecimal balance, BigDecimal transferLimit, BigDecimal transferLimitCap) {
+        this.balance = balance;
+        this.transferLimit = transferLimit;
+        this.transferLimitCap = transferLimitCap;
     }
 
 }

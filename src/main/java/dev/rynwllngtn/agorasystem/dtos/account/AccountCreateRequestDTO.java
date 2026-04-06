@@ -25,8 +25,8 @@ public class AccountCreateRequestDTO {
 
     public Account getAccount() {
         return switch (accountType) {
-            case CHECKING -> new AccountChecking(this);
-            case SAVING -> new AccountSaving(this);
+            case CHECKING -> new AccountChecking(balance, transferLimit, transferLimitCap);
+            case SAVING -> new AccountSaving(balance,transferLimit, transferLimitCap);
             case NONE -> null;
         };
     }
