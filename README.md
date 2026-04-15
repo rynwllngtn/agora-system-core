@@ -106,10 +106,3 @@ Para rodar a API na sua máquina, você precisará do **Java 25** e de uma inst�
    ```
    ou inicie a classe Main diretamente pela sua IDE (como no IntelliJ).
 5. Acesse `http://localhost:8080/users` no seu Postman ou navegador para interagir com a API.
-
----
-
-## Linha do Tempo
-
-Mantenho um registro detalhado de cada mudança arquitetural e nova funcionalidade aplicada ao sistema principal.  
-Você pode acompanhar essa evolução técnica no meu [CHANGELOG.md](./CHANGELOG.md).
